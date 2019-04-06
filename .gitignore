@@ -9,3 +9,12 @@ firmware-newport.bin
 firmware-newport.img
 mkimage_jtag
 signing-key.asim
+bionic-arm64.ext4
+bionic-arm64.tar.xz
+bionic-newport.img
+bionic-newport.img.gz
+kernel.itb
+kernel.its
+linux-newport.tar.xz
+newport.scr
+vmlinux.gz
