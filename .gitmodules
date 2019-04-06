@@ -10,3 +10,6 @@
 [submodule "atf"]
 	path = atf
 	url = https://github.com/Gateworks/atf-newport.git
+[submodule "linux"]
+	path = linux
+	url = https://github.com/chrberger/linux-newport.git
