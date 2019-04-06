@@ -4,3 +4,6 @@
 [submodule "bdk"]
 	path = bdk
 	url = https://github.com/Gateworks/bdk-newport.git
+[submodule "dts"]
+	path = dts
+	url = https://github.com/Gateworks/dts-newport.git
