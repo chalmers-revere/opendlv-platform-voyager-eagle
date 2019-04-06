@@ -3,3 +3,9 @@ thunderx-tools-97
 tools-gcc-6.2.tar.bz2
 bin
 fip.img
+version
+bdk.bin
+firmware-newport.bin
+firmware-newport.img
+mkimage_jtag
+signing-key.asim

@@ -222,7 +222,7 @@ def flash_ptgen(filename, partsize):
     # Note that FatFS currently only looks at the first partition
     p1 = "1:%d:%d " % (start_sector, end_sector)
     p2 = "0x83:16M:%s" % partsize
-    subprocess.check_call(["./newport/ptgen", "-o", filename,
+    subprocess.check_call(["./ptgen", "-o", filename,
         "-p", p1, "-p", p2])
 
 #
