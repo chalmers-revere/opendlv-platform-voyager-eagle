@@ -34,7 +34,7 @@ LINUXPARTSZ ?= 7248M
 firmware-image: firmware jtag_image
 	$(MAKE) version
 	# generate our own bdk.bin with different contents/offsets
-	./newport/bdk-create-fatfs-image.py create \
+	./bdk-create-fatfs-image.py create \
 		--partsize $(LINUXPARTSZ) \
 		--out bdk.bin \
 		--ap_bl1 bdk/apps/boot/boot.bin \
@@ -48,7 +48,7 @@ firmware-image: firmware jtag_image
 		bdk/trust-keys/bdk-sign.pub.sign \
 		bdk/boards/gw*.dtb* \
 		dts/gw*.dtb
-	./newport/make-bootfs.py \
+	./make-bootfs.py \
 		--bs bdk.bin \
 		--bl1 atf/build/t81/release/bl1.bin \
 		--fip fip.img \
@@ -66,7 +66,7 @@ endif
 	# configure U-Boot env
 	truncate -s 16M firmware-newport.img
 	dd if=/dev/zero of=firmware-newport.img bs=1k seek=16320 count=64
-	fw_setenv --config newport/fw_env.config --script newport/newport.env
+	fw_setenv --config fw_env.config --script newport.env
 
 .PHONY: bdk
 bdk: toolchain
@@ -91,7 +91,8 @@ atf: toolchain
 
 .PHONY: linux
 linux: toolchain
-	$(MAKE) -C linux newport_defconfig all
+	#$(MAKE) -C linux newport_defconfig all
+	$(MAKE) -C linux all
 
 .PHONY: kernel_menuconfig
 kernel_menuconfig: toolchain
@@ -127,7 +128,7 @@ UBUNTU_ROOTFS ?= $(UBUNTU_REL)-arm64.tar.xz
 
 $(UBUNTU_FS): kernel_image
 	wget -N http://dev.gateworks.com/ubuntu/$(UBUNTU_REL)/$(UBUNTU_ROOTFS)
-	sudo ./newport/mkfs ext4 $(UBUNTU_FS) $(UBUNTU_FSSZMB) linux-newport.tar.xz $(UBUNTU_ROOTFS)
+	sudo ./mkfs ext4 $(UBUNTU_FS) $(UBUNTU_FSSZMB) linux-newport.tar.xz $(UBUNTU_ROOTFS)
 
 .PHONY: ubuntu-image
 ubuntu-image: $(UBUNTU_FS) firmware-image kernel_image
@@ -135,12 +136,12 @@ ubuntu-image: $(UBUNTU_FS) firmware-image kernel_image
 	# create kernel.itb with compressed kernel image
 	cp $(UBUNTU_KERNEL) vmlinux
 	gzip -f vmlinux
-	./newport/mkits.sh -o kernel.its -k vmlinux.gz -C gzip -v "Ubuntu"
+	./mkits.sh -o kernel.its -k vmlinux.gz -C gzip -v "Ubuntu"
 	mkimage -f kernel.its kernel.itb
 	# inject kernel.itb into FATFS
 	fatfs-tool -i $(UBUNTU_IMG) cp kernel.itb /
 	# inject bootscript into FATFS
-	mkimage -A arm64 -T script -C none -d newport/ubuntu.scr ./newport.scr
+	mkimage -A arm64 -T script -C none -d ubuntu.scr ./newport.scr
 	fatfs-tool -i $(UBUNTU_IMG) cp newport.scr /
 	# copy ubuntu rootfs to image
 	dd if=$(UBUNTU_FS) of=$(UBUNTU_IMG) bs=16M seek=1
@@ -165,12 +166,12 @@ openwrt-image: firmware-image openwrt
 	# create kernel.itb with compressed kernel image
 	cp $(OPENWRT_KERNEL) vmlinux
 	gzip -f vmlinux
-	./newport/mkits.sh -o kernel.its -k vmlinux.gz -C gzip -v "OpenWrt"
+	./mkits.sh -o kernel.its -k vmlinux.gz -C gzip -v "OpenWrt"
 	mkimage -f kernel.its kernel.itb
 	# inject kernel.itb into FATFS
 	fatfs-tool -i $(OPENWRT_IMG) cp kernel.itb /
 	# inject bootscript into FATFS
-	mkimage -A arm64 -T script -C none -d newport/openwrt.scr ./newport.scr
+	mkimage -A arm64 -T script -C none -d openwrt.scr ./newport.scr
 	fatfs-tool -i $(OPENWRT_IMG) cp newport.scr /
 	# copy openwrt rootfs to image
 	dd if=$(OPENWRT_FS) of=$(OPENWRT_IMG) bs=16M seek=1
