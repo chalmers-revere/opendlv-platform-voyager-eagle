@@ -1,3 +1,6 @@
 [submodule "u-boot"]
 	path = u-boot
 	url = https://github.com/Gateworks/uboot-newport.git
+[submodule "bdk"]
+	path = bdk
+	url = https://github.com/Gateworks/bdk-newport.git
