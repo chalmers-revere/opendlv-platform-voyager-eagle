@@ -7,3 +7,6 @@
 [submodule "dts"]
 	path = dts
 	url = https://github.com/Gateworks/dts-newport.git
+[submodule "atf"]
+	path = atf
+	url = https://github.com/Gateworks/atf-newport.git
