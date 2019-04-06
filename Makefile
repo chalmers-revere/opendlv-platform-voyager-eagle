@@ -31,8 +31,7 @@ jtag_image:
 
 LINUXPARTSZ ?= 7248M
 .PHONY: firmware-image
-#firmware-image: firmware jtag_image
-firmware-image:
+firmware-image: firmware jtag_image
 	$(MAKE) version
 	# generate our own bdk.bin with different contents/offsets
 	./bdk-create-fatfs-image.py create \
